@@ -46,210 +46,216 @@
 </div>
 <script>
 
-var width = 1200,
-    height = 900;
+    var width = 1200,
+        height = 900;
 
-var color = d3.scale.category20();
+    var color = d3.scale.category20();
 
-var force = d3.layout.force()
-    .charge(-300)
-    .linkDistance(60)
-    .size([width, height]);
+    var force = d3.layout.force()
+        .charge(-300)
+        .linkDistance(60)
+        .size([width, height]);
 
-var gr = {};
+    var gr = {};
 
-gr.lightness = function (d) {
-  return 50;
-}
+    gr.lightness = function (d) {
+        return 50;
+    }
 
-var avatar = d3.select(".avatar")
-    .on("click", function (x) {
-      var id = d3.select(this).attr("data-id");
-      loadData(id);
-    });
+    var avatar = d3.select(".avatar")
+        .on("click", function (x) {
+            var id = d3.select(this).attr("data-id");
+            window.history.pushState(id, id, "/id" + id);
+            loadData(id);
+        });
 
-var svg = d3.select("svg");
-//var lines = new Array(20);
-//
-//for (var i = lines.length - 1; i >= 0; i--) {
-//  lines[i] = [i * 30, 0, i * 30, 900];
-//};
-//
-//svg.selectAll("line")
-//  .data(lines)
-//  .enter().append("line")
-//  .attr("x1", function(d) { return d[0]; })
-//  .attr("y1", function(d) { return d[1]; })
-//  .attr("x2", function(d) { return d[2]; })
-//  .attr("y2", function(d) { return d[3]; })
-//  .style("stroke", "rgb(255,0,0)");
+    var svg = d3.select("svg");
+    //var lines = new Array(20);
+    //
+    //for (var i = lines.length - 1; i >= 0; i--) {
+    //  lines[i] = [i * 30, 0, i * 30, 900];
+    //};
+    //
+    //svg.selectAll("line")
+    //  .data(lines)
+    //  .enter().append("line")
+    //  .attr("x1", function(d) { return d[0]; })
+    //  .attr("y1", function(d) { return d[1]; })
+    //  .attr("x2", function(d) { return d[2]; })
+    //  .attr("y2", function(d) { return d[3]; })
+    //  .style("stroke", "rgb(255,0,0)");
 
-function render(graph) {
-  gr.nodes = graph.nodes;
-  gr.links = graph.links;
+    function render(graph) {
+        gr.nodes = graph.nodes;
+        gr.links = graph.links;
 
-  force
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .start();
+        force
+            .nodes(graph.nodes)
+            .links(graph.links)
+            .start();
 
-  var link = svg.selectAll(".link")
-      .data(graph.links)
-    .enter().append("line")
-      .attr("class", "link");
+        var link = svg.selectAll(".link")
+            .data(graph.links)
+          .enter().append("line")
+            .attr("class", "link");
 
-  var node = svg.selectAll(".node")
-      .data(graph.nodes)
-    .enter()
-    .append("circle")
-      .attr("class", "node")
-      .attr("r", 8)
-      .on("mouseover", function (d) {
-        showAvatar(d);
-      })
-      .on("click", function(d) { d.fixed = true; }) // ws.send(d.id); })
-      //.style("fill", function(d) { return color(d.cityId); })
-      //.attr("fill", "url(#avatar)")
+        var node = svg.selectAll(".node")
+            .data(graph.nodes)
+          .enter()
+          .append("circle")
+            .attr("class", "node")
+            .attr("r", 8)
+            .on("mouseover", function (d) {
+                showAvatar(d);
+            })
+            .on("click", function (d) { d.fixed = true; }) // ws.send(d.id); })
+            //.style("fill", function(d) { return color(d.cityId); })
+            //.attr("fill", "url(#avatar)")
 
-      //.style("stroke", function(d) { return d.gender ? "dodgerblue" : "violet"; })
-      .call(force.drag);
+            //.style("stroke", function(d) { return d.gender ? "dodgerblue" : "violet"; })
+            .call(force.drag);
 
-  node.append("title")
-      .text(function(d) { return d.firstName + ' ' + d.lastName; });
+        node.append("title")
+            .text(function (d) { return d.firstName + ' ' + d.lastName; });
 
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+        force.on("tick", function () {
+            link.attr("x1", function (d) { return d.source.x; })
+                .attr("y1", function (d) { return d.source.y; })
+                .attr("x2", function (d) { return d.target.x; })
+                .attr("y2", function (d) { return d.target.y; });
 
-    node.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  });
-}
+            node.attr("cx", function (d) { return d.x; })
+                .attr("cy", function (d) { return d.y; });
+        });
+    }
 
-function gender() {
-    gr.hue = genderColor;
-    updateGraphColor();
+    function gender() {
+        gr.hue = genderColor;
+        updateGraphColor();
 
 
-  }
+    }
 
-function city() {
-    svg.selectAll('.node')
-      .data(gr.nodes)
-      .transition()
-      .style("fill", function(d) {
-        return color(d.cityId % 10);
-      });
+    function city() {
+        svg.selectAll('.node')
+          .data(gr.nodes)
+          .transition()
+          .style("fill", function (d) {
+              return color(d.cityId % 10);
+          });
 
-     ws.send(JSON.stringify({forId: gr.id, targetId: gr.id, typeName: "cities"}));
-}
+        ws.send(JSON.stringify({ forId: gr.id, targetId: gr.id, typeName: "cities" }));
+    }
 
-function updateGraphColor() {
-  svg.selectAll('.node')
-      .data(gr.nodes)
-      .transition()
-      .style("fill", function(d) {
-        return hsla(gr.hue(d), 90, gr.lightness(d), 1);
-      });
-}
+    function updateGraphColor() {
+        svg.selectAll('.node')
+            .data(gr.nodes)
+            .transition()
+            .style("fill", function (d) {
+                return hsla(gr.hue(d), 90, gr.lightness(d), 1);
+            });
+    }
 
-function genderColor(d) {
-  return d.gender ? 200 : 320;
-}
+    function genderColor(d) {
+        return d.gender ? 200 : 320;
+    }
 
-function relatives() {
-  svg.selectAll(".link")
-        .data(gr.links)
-        .transition()
-        .attr("class", "link")
-        .style("stroke", function(d) { return d.value ? 'red' : 'gray'; })
-        .style("stroke-width", function(d) { return d.value ? 3 : 1; });
-}
+    function relatives() {
+        svg.selectAll(".link")
+              .data(gr.links)
+              .transition()
+              .attr("class", "link")
+              .style("stroke", function (d) { return d.value ? 'red' : 'gray'; })
+              .style("stroke-width", function (d) { return d.value ? 3 : 1; });
+    }
 
-function grouped() {
-  ws.send(JSON.stringify({forId: gr.id, targetId: gr.id, typeName: "age"}));
-}
+    function grouped() {
+        ws.send(JSON.stringify({ forId: gr.id, targetId: gr.id, typeName: "age" }));
+    }
 
-function drawAge() {
-    gr.lightness = function(d) {
-        var result = gr.mean[d.id];
-        if (result) {
-          return 90 - gauss(result - gr.targetAge)*40;
-        } else {
-          return 90;
-        }
-      };
-    updateGraphColor();
-  }
-
-function gauss(x) {
-  return Math.pow(Math.E, -Math.pow(x, 2) / 16.0);
-}
-
-function hsla(h, s, l, a) {
-  return 'hsla('+h+', '+s+'%, '+l+'%, '+a+')';
-}
-
-function search(e) {
-  svg.selectAll('.node')
-      .data(gr.nodes)
-      .transition()
-      .style("opacity", function(d) {
-        if (d.firstName.toLowerCase().includes(e.value.toLowerCase()) || d.lastName.includes(e.value.toLowerCase())) {
-          return 1;
-        } else {
-          return 0.3;
+    function drawAge() {
+        gr.lightness = function (d) {
+            var result = gr.mean[d.id];
+            if (result) {
+                return 90 - gauss(result - gr.targetAge) * 40;
+            } else {
+                return 90;
+            }
         };
-      });
-}
+        updateGraphColor();
+    }
 
-ws = new WebSocket("ws://localhost:6002");
-ws.onmessage = function(m) {
-  var data = JSON.parse(m.data);
+    function gauss(x) {
+        return Math.pow(Math.E, -Math.pow(x, 2) / 16.0);
+    }
 
-  if (data.typeName == "initial") {
-    d3.select('svg').selectAll('.node').remove();
-    d3.select('svg').selectAll('.link').remove();
-    render(data.result);
-  } else if (data.typeName == "age") {
-    gr.mean = data.result;
-    gr.targetAge = gr.mean[gr.id];
-    drawAge();
-  } else if (data.typeName == "cities") {
-    gr.cities = data.result;
-    showCities();
-  }
+    function hsla(h, s, l, a) {
+        return 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + a + ')';
+    }
 
-}
+    function search(e) {
+        svg.selectAll('.node')
+            .data(gr.nodes)
+            .transition()
+            .style("opacity", function (d) {
+                if (d.firstName.toLowerCase().includes(e.value.toLowerCase()) || d.lastName.includes(e.value.toLowerCase())) {
+                    return 1;
+                } else {
+                    return 0.3;
+                };
+            });
+    }
 
-ws.onclose = function() {
-  console.log("ws is closed");
-};
+    ws = new WebSocket("ws://localhost:6002");
+    ws.onmessage = function (m) {
+        var data = JSON.parse(m.data);
 
-function loadData(id) {
-  var id = parseInt(id);
-  gr.id = id;
-  ws.send(JSON.stringify({forId: id, targetId: id, typeName: "initial"}));
-}
+        if (data.typeName == "initial") {
+            d3.select('svg').selectAll('.node').remove();
+            d3.select('svg').selectAll('.link').remove();
+            render(data.result);
+        } else if (data.typeName == "age") {
+            gr.mean = data.result;
+            gr.targetAge = gr.mean[gr.id];
+            drawAge();
+        } else if (data.typeName == "cities") {
+            gr.cities = data.result;
+            showCities();
+        }
 
-function showAvatar(user) {
-  avatar.attr("src", user.photoUrl)
-    .attr("data-id", user.id);
+    }
 
-  d3.select("#targetName")
-    .text(user.firstName + ' ' + user.lastName);
+    ws.onclose = function () {
+        console.log("ws is closed");
+    };
 
-  if (gr.cities) {
-    d3.select("#targetCity")
-      .text(gr.cities[user.cityId]);
-  }
+    function loadData(id) {
+        var id = parseInt(id);
+        gr.id = id;
+        ws.send(JSON.stringify({ forId: id, targetId: id, typeName: "initial" }));
+    }
 
-  if (gr.mean) {
-    d3.select("#targetAge")
-      .text(gr.mean[user.id]);
-  }
-}
+    function showAvatar(user) {
+        avatar.attr("src", user.photoUrl)
+          .attr("data-id", user.id);
+
+        d3.select("#targetName")
+          .text(user.firstName + ' ' + user.lastName);
+
+        if (gr.cities) {
+            d3.select("#targetCity")
+              .text(gr.cities[user.cityId]);
+        }
+
+        if (gr.mean) {
+            d3.select("#targetAge")
+              .text(gr.mean[user.id]);
+        }
+    }
+
+    ws.onopen = function() {
+        var id = window.location.pathname;
+        loadData(id.substr(3));
+    };
 
 </script>
