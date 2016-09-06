@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdsSite", "UdsSite\UdsSite.csproj", "{D6850CFD-FD5D-40B6-B15C-AB8AE59AE7CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uds.WeSocket", "Uds.WeSocket\Uds.WeSocket.csproj", "{B0DAE5DA-09D6-4B15-9F67-2773A8C6352D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D6850CFD-FD5D-40B6-B15C-AB8AE59AE7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6850CFD-FD5D-40B6-B15C-AB8AE59AE7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6850CFD-FD5D-40B6-B15C-AB8AE59AE7CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0DAE5DA-09D6-4B15-9F67-2773A8C6352D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0DAE5DA-09D6-4B15-9F67-2773A8C6352D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0DAE5DA-09D6-4B15-9F67-2773A8C6352D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0DAE5DA-09D6-4B15-9F67-2773A8C6352D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
