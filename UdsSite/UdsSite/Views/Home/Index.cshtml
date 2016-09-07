@@ -89,6 +89,14 @@
         gr.nodes = graph.nodes;
         gr.links = graph.links;
 
+        gr.nodes
+            .filter(function(x) { return x.id === gr.id; })
+            .forEach(function(x) {
+                x.x = 600;
+                x.y = 450;
+                x.fixed = 1;
+            });
+
         force
             .nodes(graph.nodes)
             .links(graph.links)

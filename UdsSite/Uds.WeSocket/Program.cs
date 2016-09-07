@@ -24,6 +24,7 @@ namespace ConsoleApplication1 {
 
             server.ProtocolFactory = WebSocketsSelectorProcessor.Default;
             server.ConnectionTimeoutSeconds = 60;
+            server.MaxOutgoingQuota = 640000;
             server.Received += msg => {
                 redis.GetSubscriber()
                     .Publish(new RedisChannel("request", RedisChannel.PatternMode.Auto),
