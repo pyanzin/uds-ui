@@ -24,6 +24,10 @@
     #targetSummary {
         position: fixed;
     }
+
+    .year {
+        background-color: green;
+    }
 </style>
 <body>
     <div id="targetSummary">
@@ -36,6 +40,7 @@
 </body>
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script scr="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.js"></script>
+<div id="years"></div>
 <div>
     <input type="button" value="Gender" onclick="gender()" />
     <input type="button" value="City" onclick="city()" />
@@ -45,6 +50,43 @@
     <input type="textbox" onchange="loadData(this.value)" />
 </div>
 <script>
+    var getObjectKeys = Object.keys;
+
+    var getObjectValues = function (obj) {
+        var keys = getObjectKeys(obj);
+
+        var result = [];
+
+        for (var i = 0; i < keys.length; i++) {
+            var value = obj[keys[i]];
+            result.push(value);
+        }
+
+        return result;
+    }
+
+    var distinct = function (xs) {
+        return xs.filter(function (x, i, xs) {
+            return i === xs.indexOf(x);
+        });
+    }
+
+    var identity = function (x) {
+        return x;
+    }
+
+    var distribution = function (xs) {
+        var result = {};
+        for (var i = 0; i < xs.length; i++) {
+            if (result[xs[i]]) {
+                result[xs[i]]++;
+            } else {
+                result[xs[i]] = 1;
+            }
+        }
+
+        return result;
+    }
 
     var width = 1200,
         height = 900;
@@ -90,8 +132,8 @@
         gr.links = graph.links;
 
         gr.nodes
-            .filter(function(x) { return x.id === gr.id; })
-            .forEach(function(x) {
+            .filter(function (x) { return x.id === gr.id; })
+            .forEach(function (x) {
                 x.x = 600;
                 x.y = 450;
                 x.fixed = 1;
@@ -140,8 +182,6 @@
     function gender() {
         gr.hue = genderColor;
         updateGraphColor();
-
-
     }
 
     function city() {
@@ -190,7 +230,30 @@
                 return 90;
             }
         };
+
+        drawYears();
         updateGraphColor();
+    }
+
+    function drawYears() {
+        var yearsDist = distribution(getObjectValues(gr.mean));
+
+        var years = getObjectKeys(yearsDist).sort().map(function(x) {
+            return { year: x, count: yearsDist[x] };
+        });
+
+        d3.select("#years").selectAll(".year")
+            .data(years)
+            .enter()
+            .append("div")
+            .attr("class", "year")
+            .text(function(x) {
+                return x.year;
+            })
+            .style("width", function(x) {
+                return String(x.count * 10) + "px";
+            });
+
     }
 
     function gauss(x) {
@@ -261,7 +324,7 @@
         }
     }
 
-    ws.onopen = function() {
+    ws.onopen = function () {
         var id = window.location.pathname;
         loadData(id.substr(3));
     };
