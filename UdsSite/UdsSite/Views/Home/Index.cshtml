@@ -198,7 +198,7 @@
     function updateGraphColor() {
         svg.selectAll('.node')
             .data(gr.nodes)
-            .transition()
+            //.transition()
             .style("fill", function (d) {
                 return hsla(gr.hue(d), 90, gr.lightness(d), 1);
             });
@@ -252,12 +252,21 @@
             })
             .style("width", function(x) {
                 return String(x.count * 10) + "px";
+            })
+            .on("mouseover", function (x) {
+                var year = x.year;
+                gr.lightness = function(y) {
+                        return 90 - gauss(gr.mean[y.id] - year, 4.0) * 40;
+                }
+
+                updateGraphColor();
             });
 
     }
 
-    function gauss(x) {
-        return Math.pow(Math.E, -Math.pow(x, 2) / 16.0);
+    function gauss(x, n) {
+        n = n || 16;
+        return Math.pow(Math.E, -Math.pow(x, 2) / n);
     }
 
     function hsla(h, s, l, a) {
