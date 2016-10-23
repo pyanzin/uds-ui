@@ -13,10 +13,7 @@ namespace UdsSite {
 
 
 
-            bundles.Add(new StyleBundle("~/bundles/styles").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/themes/base/*.css"));
+            bundles.Add(new StyleBundle("~/bundles/styles").Include("~/Content/site.css"));
 
 
 

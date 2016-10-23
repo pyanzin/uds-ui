@@ -1,24 +1,42 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿* {
+  font-family: Tahoma;
+  margin: 4px;
+  padding: 4px;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.node {
+  stroke-width: 3px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+.link {
+  stroke: #999;
+  stroke-opacity: .5;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    /*max-width: 280px;*/
+.avatar {
+  border-radius: 100px;
+}
+
+.year {
+  background-color: green;
+}
+
+#targetSummary {
+  border: 2px solid #00ff90;
+}
+
+.btn {
+  border-radius: 0.5em;
+  border: 1px solid dodgerblue;
+  color: dodgerblue;
+}
+
+.btn-main {
+  border-radius: 0.5em;
+  background-color: dodgerblue;
+  color: #fff !important;
+}
+
+#graph {
+  border: 1px solid #333;
 }
