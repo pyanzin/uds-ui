@@ -8,20 +8,10 @@
   @Styles.Render("~/bundles/styles")
   <script src="//d3js.org/d3.v3.min.js"></script>
   <script src="Scripts/jquery-2.1.1.js"></script>
-  <script src="~/Scripts/uds.js"></script>
+
 </head>
 <body>
-  <div id="targetSummary">
-    <img class="avatar">
-    <div id="targetName"></div>
-    <div id="targetCity"></div>
-    <div id="targetAge"></div>
-    <a class="btn-main">uds</a>
-    <a class="btn">vk</a>
-  </div>
-  <svg id="graph-svg" width="800" height="600"></svg>
-  <div id="years"></div>
-  <div>
+  <div id="buttons">
     <input type="button" value="Gender" onclick="gender()" />
     <input type="button" value="City" onclick="city()" />
     <input type="button" value="Relatives" onclick="relatives()" />
@@ -29,7 +19,19 @@
     <input type="textbox" onchange="search(this)" />
     <input type="textbox" onchange="loadData(this.value)" />
   </div>
+  <div id="firstFlex">
+    <div id="targetSummary">
+      <img class="avatar">
+      <div id="targetName"></div>
+      <div id="targetCity"></div>
+      <div id="targetAge"></div>
+      <a id="openUdsBtn" class="btn-main">uds</a>
+      <a id="openVkBtn" class="btn">vk</a>
+    </div>
+    <svg id="graph-svg" width="750" height="600"></svg>
+    <div id="years"></div>
+  </div>  
 </body>
 
 
-
+<script src="~/Scripts/uds.js"></script>

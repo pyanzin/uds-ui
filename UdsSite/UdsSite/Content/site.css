@@ -21,8 +21,14 @@
   background-color: green;
 }
 
+#firstFlex {
+  display: flex;
+}
+
 #targetSummary {
   border: 2px solid #00ff90;
+  width: 200px;
+  
 }
 
 .btn {

@@ -84,8 +84,8 @@ function render(graph) {
   gr.nodes
       .filter(function (x) { return x.id === gr.id; })
       .forEach(function (x) {
-        x.x = 400;
-        x.y = 300;
+        x.x = 500;
+        x.y = 400;
         x.fixed = 1;
       });
 
@@ -282,6 +282,12 @@ function showAvatar(user) {
     d3.select("#targetAge")
       .text(gr.mean[user.id]);
   }
+
+  d3.select("#openUdsBtn")
+    .attr("href", "/id" + user.id);
+
+  d3.select("#openVkBtn")
+    .attr("href", "https://vk.com/id" + user.id);
 }
 
 ws.onopen = function () {
